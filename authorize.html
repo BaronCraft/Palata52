@@ -8,7 +8,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <style>
-    /* Все стили как в предыдущей версии */
     * {
       margin: 0;
       padding: 0;
@@ -222,37 +221,12 @@
       transition: all 0.2s;
       border: 1px solid rgba(255,255,255,0.1);
       margin-bottom: 1rem;
-      position: relative;
     }
 
     .btn-login:hover {
       background: #3b82f6;
       box-shadow: 0 20px 30px -5px #1e4bae;
       transform: translateY(-2px);
-    }
-
-    .btn-login:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-
-    .spinner {
-      display: none;
-      width: 1.2rem;
-      height: 1.2rem;
-      border: 3px solid rgba(255,255,255,0.3);
-      border-radius: 50%;
-      border-top-color: white;
-      animation: spin 1s ease-in-out infinite;
-      margin-left: 0.5rem;
-    }
-
-    .btn-login.loading .spinner {
-      display: inline-block;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
     }
 
     .error-message {
@@ -309,36 +283,46 @@
 
     <div class="auth-title">Вход в палату</div>
 
-    <div class="form-group">
-      <label>Имя</label>
-      <div class="input-wrapper">
-        <select id="username" required>
-          <option value="" disabled selected>— Выбери имя —</option>
-          <option value="Матвей">Матвей</option>
-          <option value="Артём">Артём</option>
-          <option value="Оля">Оля</option>
-          <option value="Ксюша">Ксюша</option>
-          <option value="Ирина">Ирина</option>
-        </select>
+    <?php
+    // Показываем ошибки если есть
+    if (isset($_GET['error'])) {
+        if ($_GET['error'] == 'not_found') {
+            echo '<div class="error-message">Пользователь не найден</div>';
+        } elseif ($_GET['error'] == 'wrong_password') {
+            echo '<div class="error-message">Неверный пароль</div>';
+        }
+    }
+    ?>
+
+    <form action="auth.php" method="post">
+      <div class="form-group">
+        <label>Имя</label>
+        <div class="input-wrapper">
+          <select name="username" class="form-select" required>
+            <option value="" disabled selected>— Выбери имя —</option>
+            <option value="Матвей">Матвей</option>
+            <option value="Артём">Артём</option>
+            <option value="Оля">Оля</option>
+            <option value="Ксюша">Ксюша</option>
+            <option value="Ирина">Ирина</option>
+          </select>
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label>Пароль</label>
-      <div class="input-wrapper">
-        <input type="password" id="password" placeholder="••••••••" required>
-        <button class="password-toggle" id="togglePassword" type="button">
-          <i class="bi bi-eye"></i>
-        </button>
+      <div class="form-group">
+        <label>Пароль</label>
+        <div class="input-wrapper">
+          <input type="password" name="password" id="password" placeholder="••••••••" required>
+          <button type="button" class="password-toggle" id="togglePassword">
+            <i class="bi bi-eye"></i>
+          </button>
+        </div>
       </div>
-    </div>
 
-    <button class="btn-login" id="loginBtn">
-      <span>Войти</span>
-      <span class="spinner" id="spinner"></span>
-    </button>
-
-    <div id="errorMsg" class="error-message"></div>
+      <button type="submit" class="btn-login">
+        Войти
+      </button>
+    </form>
 
     <a href="index.html" class="back-link">
       ← На главную
@@ -346,12 +330,9 @@
   </main>
 
   <script>
-    const usernameSelect = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
+    // Показать/скрыть пароль
     const togglePassword = document.getElementById('togglePassword');
-    const loginBtn = document.getElementById('loginBtn');
-    const errorMsg = document.getElementById('errorMsg');
-    const spinner = document.getElementById('spinner');
+    const passwordInput = document.getElementById('password');
 
     togglePassword.addEventListener('click', function() {
       const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -366,81 +347,6 @@
         icon.classList.add('bi-eye-slash');
       }
     });
-
-    function showError(text) {
-      errorMsg.textContent = text;
-    }
-
-    function clearError() {
-      errorMsg.textContent = '';
-    }
-
-    function setLoading(isLoading) {
-      if (isLoading) {
-        loginBtn.classList.add('loading');
-        loginBtn.disabled = true;
-      } else {
-        loginBtn.classList.remove('loading');
-        loginBtn.disabled = false;
-      }
-    }
-
-    async function handleLogin() {
-      const username = usernameSelect.value;
-      const password = passwordInput.value.trim();
-
-      clearError();
-
-      if (!username) {
-        showError('Выбери имя');
-        return;
-      }
-
-      if (!password) {
-        showError('Введи пароль');
-        return;
-      }
-
-      setLoading(true);
-
-      try {
-        const response = await fetch('/auth.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username, password })
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.success) {
-          localStorage.setItem('user', JSON.stringify({
-            username: username,
-            loginTime: new Date().toISOString()
-          }));
-          window.location.href = data.redirect || '/messenger.html';
-        } else {
-          showError(data.error || 'Ошибка входа');
-          setLoading(false);
-        }
-      } catch (error) {
-        showError('Ошибка соединения с сервером');
-        setLoading(false);
-      }
-    }
-
-    loginBtn.addEventListener('click', handleLogin);
-    
-    passwordInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        handleLogin();
-      }
-    });
-
-    usernameSelect.addEventListener('change', clearError);
-    passwordInput.addEventListener('input', clearError);
   </script>
 </body>
 </html>
