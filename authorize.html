@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* Стили точно такие же, как в предыдущей версии */
+    /* Стили такие же, как были */
     * {
       margin: 0;
       padding: 0;
@@ -286,38 +286,34 @@
 
     <div class="auth-title">Вход в палату</div>
 
-    <!-- Форма теперь отправляет данные на сервер -->
-    <form id="loginForm" method="POST" action="auth.php">
-      <div class="form-group">
-        <label>Имя</label>
-        <div class="input-wrapper">
-          <select name="username" id="username">
-            <option value="" disabled selected>— Выбери имя —</option>
-            <option value="Матвей">Матвей</option>
-            <option value="Артём">Артём</option>
-            <option value="Оля">Оля</option>
-            <option value="Ксюша">Ксюша</option>
-            <option value="Ирина">Ирина</option>
-          </select>
-        </div>
+    <div class="form-group">
+      <label>Имя</label>
+      <div class="input-wrapper">
+        <select id="username">
+          <option value="" disabled selected>— Выбери имя —</option>
+          <option value="Матвей">Матвей</option>
+          <option value="Артём">Артём</option>
+          <option value="Оля">Оля</option>
+          <option value="Ксюша">Ксюша</option>
+          <option value="Ирина">Ирина</option>
+        </select>
       </div>
+    </div>
 
-      <div class="form-group">
-        <label>Пароль</label>
-        <div class="input-wrapper">
-          <input type="password" name="password" id="password" placeholder="••••••••">
-          <button class="password-toggle" id="togglePassword" type="button">
-            <i class="fa-regular fa-eye"></i>
-          </button>
-        </div>
+    <div class="form-group">
+      <label>Пароль</label>
+      <div class="input-wrapper">
+        <input type="password" id="password" placeholder="••••••••">
+        <button class="password-toggle" id="togglePassword" type="button">
+          <i class="fa-regular fa-eye"></i>
+        </button>
       </div>
+    </div>
 
-      <button type="submit" class="btn-login" id="loginBtn">
-        Войти
-      </button>
-    </form>
+    <button class="btn-login" id="loginBtn">
+      Войти
+    </button>
 
-    <!-- Сообщение об ошибке теперь может заполняться через GET-параметр -->
     <div id="errorMsg" class="error-message"></div>
 
     <a href="index.html" class="back-link">
@@ -326,10 +322,17 @@
   </main>
 
   <script>
-    // Показать/скрыть пароль (чисто визуально, безопасности не вредит)
-    const togglePassword = document.getElementById('togglePassword');
+    // Пароль Матвея (да, он виден в коде, но для компании друзей это ок)
+    const users = {
+      "Матвей": "m8012011"
+    };
+
+    const usernameSelect = document.getElementById('username');
     const passwordInput = document.getElementById('password');
-    
+    const togglePassword = document.getElementById('togglePassword');
+    const loginBtn = document.getElementById('loginBtn');
+    const errorMsg = document.getElementById('errorMsg');
+
     togglePassword.addEventListener('click', function() {
       const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
       passwordInput.setAttribute('type', type);
@@ -344,16 +347,54 @@
       }
     });
 
-    // Обработка ошибки, если она пришла с сервера
-    const urlParams = new URLSearchParams(window.location.search);
-    const error = urlParams.get('error');
-    const errorMsg = document.getElementById('errorMsg');
-    
-    if (error === 'invalid') {
-      errorMsg.textContent = 'Неверное имя или пароль';
-    } else if (error === 'not_available') {
-      errorMsg.textContent = 'Вход временно недоступен для этого пользователя';
+    function showError(text) {
+      errorMsg.textContent = text;
     }
+
+    function clearError() {
+      errorMsg.textContent = '';
+    }
+
+    function handleLogin() {
+      const username = usernameSelect.value;
+      const password = passwordInput.value.trim();
+
+      clearError();
+
+      if (!username) {
+        showError('Выбери имя');
+        return;
+      }
+
+      if (!password) {
+        showError('Введите пароль');
+        return;
+      }
+
+      if (users.hasOwnProperty(username)) {
+        if (users[username] === password) {
+          window.location.href = '/messenger.html';
+        } else {
+          showError('Неверный пароль');
+        }
+      } else {
+        showError('Вход временно недоступен для этого пользователя');
+      }
+    }
+
+    loginBtn.addEventListener('click', handleLogin);
+    
+    passwordInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleLogin();
+      }
+    });
+
+    usernameSelect.addEventListener('change', clearError);
+    passwordInput.addEventListener('input', clearError);
+
+    clearError();
   </script>
 </body>
 </html>
