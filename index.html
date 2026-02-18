@@ -29,6 +29,7 @@
       justify-content: center;
       position: relative;
       overflow-x: hidden;
+      padding: 1rem; /* добавляем безопасный отступ по краям */
     }
 
     /* Фоновые эффекты */
@@ -70,19 +71,19 @@
       z-index: 0;
     }
 
-    /* Главная карточка */
+    /* Главная карточка — уменьшены отступы для мобильных */
     .welcome-card {
       position: relative;
       z-index: 10;
       max-width: 900px;
-      width: 90%;
-      margin: 2rem auto;
-      padding: 3rem 2.5rem;
+      width: 100%;
+      margin: 1rem auto;
+      padding: 2rem 1.5rem;
       background: rgba(10, 18, 30, 0.6);
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
       border: 1px solid rgba(0, 150, 255, 0.15);
-      border-radius: 3rem;
+      border-radius: 2.5rem;
       box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 160, 255, 0.1) inset;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       text-align: center;
@@ -93,33 +94,20 @@
       transform: scale(1.01);
     }
 
-    /* Иконка */
-    .company-header {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 2rem;
-    }
-
-    .company-header i {
-      font-size: 3rem;
-      color: #3b82f6;
-      filter: drop-shadow(0 0 15px #3b82f6);
-    }
-
-    /* Крупный номер */
+    /* Крупный номер — чуть уменьшен для мобильных */
     .title-number {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.3rem;
-      font-size: 5rem;
+      gap: 0.2rem;
+      font-size: 4rem;
       font-weight: 700;
       line-height: 1;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
 
     .title-number .num-sign {
-      font-size: 6rem;
+      font-size: 5rem;
       background: linear-gradient(135deg, #3b82f6, #00a6ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -128,7 +116,7 @@
     }
 
     .title-number .num-52 {
-      font-size: 6rem;
+      font-size: 5rem;
       background: linear-gradient(135deg, #ffffff, #a0c8ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -136,13 +124,13 @@
       text-shadow: 0 0 25px rgba(59,130,246,0.6);
     }
 
-    /* Палата */
+    /* Палата — чуть меньше */
     .greeting {
-      margin: 1.5rem 0 2rem 0;
+      margin: 1rem 0 1.5rem 0;
     }
 
     .greeting .company-name {
-      font-size: 3.5rem;
+      font-size: 3rem;
       font-weight: 700;
       background: linear-gradient(135deg, #d6e6ff, #80b4ff);
       -webkit-background-clip: text;
@@ -152,50 +140,49 @@
       letter-spacing: 2px;
     }
 
-    /* Блок с цитатой */
+    /* Блок с цитатой — компактнее */
     .quote-container {
-      margin: 3rem 0;
-      padding: 2rem;
+      margin: 2rem 0;
+      padding: 1.5rem 1rem;
       background: rgba(0, 100, 255, 0.05);
-      border-radius: 2rem;
+      border-radius: 1.8rem;
       border: 1px solid rgba(0, 150, 255, 0.2);
-      position: relative;
     }
 
     .quote-icon {
-      font-size: 2rem;
+      font-size: 1.8rem;
       color: #3b82f6;
       opacity: 0.5;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
     }
 
     .quote-text {
-      font-size: 1.3rem;
-      line-height: 1.6;
+      font-size: 1.2rem;
+      line-height: 1.5;
       color: #b0d0ff;
       font-style: italic;
       max-width: 600px;
-      margin: 0 auto 1.5rem;
-      min-height: 100px;
+      margin: 0 auto 1rem;
+      min-height: 80px;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: opacity 0.3s ease;
+      padding: 0 0.5rem;
     }
 
     .refresh-quote {
       background: transparent;
       border: 1px solid #3b82f6;
       color: #3b82f6;
-      padding: 0.5rem 1.5rem;
+      padding: 0.4rem 1.2rem;
       border-radius: 60px;
-      font-size: 1rem;
+      font-size: 0.9rem;
       cursor: pointer;
       transition: all 0.2s;
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      margin-top: 1rem;
+      gap: 0.4rem;
     }
 
     .refresh-quote:hover {
@@ -204,35 +191,33 @@
       box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
     }
 
-    .refresh-quote i {
-      font-size: 1rem;
-    }
-
-    /* Кнопка Начать */
+    /* Кнопка Начать — теперь точно помещается */
     .start-button {
-      margin: 2rem 0 1rem;
+      margin: 1.5rem 0 0.5rem;
     }
 
     .btn-start {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 1rem;
+      gap: 0.8rem;
       background: #2563eb;
       color: white;
       text-decoration: none;
       font-weight: 600;
-      font-size: 1.5rem;
-      padding: 1.2rem 4rem;
+      font-size: 1.4rem;
+      padding: 1rem 2.5rem;
       border-radius: 60px;
       box-shadow: 0 15px 30px -5px #2563eb80;
       transition: all 0.3s ease;
       border: 1px solid rgba(255, 255, 255, 0.1);
       letter-spacing: 1px;
+      width: fit-content;
+      margin: 0 auto;
     }
 
     .btn-start i {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       transition: transform 0.3s ease;
     }
 
@@ -240,31 +225,52 @@
       background: #3b82f6;
       box-shadow: 0 25px 40px -5px #2563eb;
       transform: scale(1.05);
-      gap: 1.5rem;
+      gap: 1rem;
     }
 
     .btn-start:hover i {
-      transform: translateX(10px);
+      transform: translateX(8px);
     }
 
-    /* Адаптивность */
-    @media (max-width: 600px) {
+    /* Адаптивность для совсем маленьких экранов */
+    @media (max-width: 480px) {
       .welcome-card {
-        padding: 2rem 1.5rem;
+        padding: 1.5rem 1rem;
       }
+      
       .title-number .num-sign,
       .title-number .num-52 {
         font-size: 4rem;
       }
+      
       .greeting .company-name {
         font-size: 2.5rem;
       }
+      
       .quote-text {
-        font-size: 1.1rem;
+        font-size: 1rem;
+        min-height: 70px;
       }
+      
       .btn-start {
         font-size: 1.2rem;
-        padding: 1rem 2.5rem;
+        padding: 0.8rem 1.8rem;
+      }
+    }
+
+    @media (max-height: 700px) {
+      /* Для низких экранов уменьшаем отступы */
+      .quote-container {
+        margin: 1rem 0;
+        padding: 1rem;
+      }
+      
+      .greeting {
+        margin: 0.5rem 0 1rem;
+      }
+      
+      .title-number {
+        margin-bottom: 0.5rem;
       }
     }
   </style>
@@ -277,12 +283,7 @@
 
   <!-- Карточка -->
   <main class="welcome-card">
-    <!-- Иконка -->
-    <div class="company-header">
-      <i class="fas fa-crown"></i>
-    </div>
-
-    <!-- Знак номера + 52 -->
+    <!-- Знак номера + 52 (корона убрана) -->
     <div class="title-number">
       <span class="num-sign"><i class="fas fa-hashtag"></i></span>
       <span class="num-52">52</span>
@@ -302,11 +303,11 @@
         <!-- Сюда будет вставляться цитата -->
       </div>
       <button id="refreshQuoteBtn" class="refresh-quote">
-        <i class="fas fa-sync-alt"></i> Другая цитата
+        <i class="fas fa-sync-alt"></i> Другая
       </button>
     </div>
 
-    <!-- Кнопка Начать -->
+    <!-- Кнопка Начать (теперь точно видна на всех экранах) -->
     <div class="start-button">
       <a href="/main.html" class="btn-start">
         Начать <i class="fas fa-arrow-right"></i>
@@ -339,7 +340,6 @@
 
     // Функция для обновления цитаты на странице
     function updateQuote() {
-      // Добавляем небольшой эффект исчезновения/появления
       quoteDisplay.style.opacity = '0';
       setTimeout(() => {
         quoteDisplay.textContent = getRandomQuote();
