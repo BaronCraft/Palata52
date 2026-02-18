@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Вход · Палата №52</title>
+  <title>Палата №52</title>
   <!-- Фавикон -->
   <link rel="icon" href="/Логотипчик.jpg" type="image/jpeg">
   <!-- Шрифт Inter -->
@@ -71,14 +71,14 @@
       z-index: 0;
     }
 
-    /* Карточка входа */
-    .auth-card {
+    /* Главная карточка */
+    .welcome-card {
       position: relative;
       z-index: 10;
-      max-width: 500px;
+      max-width: 900px;
       width: 100%;
       margin: 1rem auto;
-      padding: 2.5rem 2rem;
+      padding: 2rem 1.5rem;
       background: rgba(10, 18, 30, 0.6);
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
@@ -89,216 +89,187 @@
       text-align: center;
     }
 
-    .auth-card:hover {
+    .welcome-card:hover {
       box-shadow: 0 40px 70px -10px rgba(0, 100, 255, 0.3), 0 0 0 1px rgba(0, 180, 255, 0.2) inset;
       transform: scale(1.01);
     }
 
-    /* Мини-шапка с номером */
-    .auth-header {
+    /* Крупный номер */
+    .title-number {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-      font-size: 1.8rem;
+      gap: 0.2rem;
+      font-size: 4rem;
       font-weight: 700;
+      line-height: 1;
+      margin-bottom: 1rem;
     }
 
-    .auth-header .num-sign {
+    .title-number .num-sign {
+      font-size: 5rem;
       background: linear-gradient(135deg, #3b82f6, #00a6ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      filter: drop-shadow(0 0 15px #3b82f6);
+      filter: drop-shadow(0 0 20px #3b82f6);
     }
 
-    .auth-header .num-52 {
+    .title-number .num-52 {
+      font-size: 5rem;
       background: linear-gradient(135deg, #ffffff, #a0c8ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      text-shadow: 0 0 20px rgba(59,130,246,0.5);
+      text-shadow: 0 0 25px rgba(59,130,246,0.6);
     }
 
-    .auth-header span {
-      font-size: 2rem;
+    /* Палата */
+    .greeting {
+      margin: 1rem 0 1.5rem 0;
     }
 
-    .auth-title {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 2rem;
+    .greeting .company-name {
+      font-size: 3rem;
+      font-weight: 700;
       background: linear-gradient(135deg, #d6e6ff, #80b4ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      text-shadow: 0 0 20px #2563eb;
+      letter-spacing: 2px;
     }
 
-    /* Форма */
-    .form-group {
-      margin-bottom: 1.5rem;
-      text-align: left;
+    /* Блок с цитатой */
+    .quote-container {
+      margin: 2rem 0;
+      padding: 1.5rem 1rem;
+      background: rgba(0, 100, 255, 0.05);
+      border-radius: 1.8rem;
+      border: 1px solid rgba(0, 150, 255, 0.2);
     }
 
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: #a0c0ff;
-      font-weight: 500;
-      font-size: 0.95rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .quote-icon {
+      font-size: 1.8rem;
+      color: #3b82f6;
+      opacity: 0.5;
+      margin-bottom: 0.8rem;
     }
 
-    .input-wrapper {
-      position: relative;
+    .quote-text {
+      font-size: 1.2rem;
+      line-height: 1.5;
+      color: #b0d0ff;
+      font-style: italic;
+      max-width: 600px;
+      margin: 0 auto 1rem;
+      min-height: 80px;
       display: flex;
       align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease;
+      padding: 0 0.5rem;
     }
 
-    .input-wrapper i {
-      position: absolute;
-      left: 1rem;
+    .refresh-quote {
+      background: transparent;
+      border: 1px solid #3b82f6;
       color: #3b82f6;
-      font-size: 1.2rem;
-      opacity: 0.7;
-      z-index: 1;
-    }
-
-    .input-wrapper select,
-    .input-wrapper input {
-      width: 100%;
-      padding: 1rem 1rem 1rem 3rem;
-      background: rgba(0, 20, 40, 0.5);
-      border: 1px solid #1e3f60;
+      padding: 0.4rem 1.2rem;
       border-radius: 60px;
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
-      color: white;
-      transition: all 0.2s;
-      appearance: none;
-      -webkit-appearance: none;
+      font-size: 0.9rem;
       cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
     }
 
-    .input-wrapper select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      background-size: 1.2rem;
+    .refresh-quote:hover {
+      background: rgba(59, 130, 246, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
     }
 
-    .input-wrapper select option {
-      background: #0a1a2a;
-      color: white;
+    /* Кнопка Начать */
+    .start-button {
+      margin: 1.5rem 0 0.5rem;
     }
 
-    .input-wrapper input:focus,
-    .input-wrapper select:focus {
-      outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-      background: rgba(0, 30, 60, 0.6);
-    }
-
-    .input-wrapper input::placeholder {
-      color: #5f7999;
-      font-style: italic;
-    }
-
-    /* Кнопка входа */
-    .btn-login {
-      width: 100%;
-      background: #2563eb;
-      border: none;
-      color: white;
-      font-weight: 600;
-      font-size: 1.2rem;
-      padding: 1rem;
-      border-radius: 60px;
+    .btn-start {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.8rem;
-      cursor: pointer;
-      box-shadow: 0 10px 25px -5px #2563eb80;
-      transition: all 0.2s;
-      border: 1px solid rgba(255,255,255,0.1);
-      margin-bottom: 1rem;
-    }
-
-    .btn-login i {
-      font-size: 1.2rem;
-      transition: transform 0.2s;
-    }
-
-    .btn-login:hover {
-      background: #3b82f6;
-      box-shadow: 0 20px 30px -5px #1e4bae;
-      gap: 1.2rem;
-    }
-
-    .btn-login:hover i {
-      transform: translateX(5px);
-    }
-
-    /* Сообщение об ошибке */
-    .error-message {
-      color: #ff6b6b;
-      font-size: 0.9rem;
-      margin: 1rem 0;
-      min-height: 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-
-    /* Ссылка назад */
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: #5f7999;
+      background: #2563eb;
+      color: white;
       text-decoration: none;
-      font-size: 0.9rem;
-      transition: color 0.2s;
-      margin-top: 1rem;
+      font-weight: 600;
+      font-size: 1.4rem;
+      padding: 1rem 2.5rem;
+      border-radius: 60px;
+      box-shadow: 0 15px 30px -5px #2563eb80;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      letter-spacing: 1px;
+      width: fit-content;
+      margin: 0 auto;
     }
 
-    .back-link:hover {
-      color: #3b82f6;
+    .btn-start i {
+      font-size: 1.3rem;
+      transition: transform 0.3s ease;
     }
 
-    /* Подпись, что вход только для админа */
-    .admin-note {
-      font-size: 0.85rem;
-      color: #5f7999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
+    .btn-start:hover {
+      background: #3b82f6;
+      box-shadow: 0 25px 40px -5px #2563eb;
+      transform: scale(1.05);
+      gap: 1rem;
     }
 
-    .admin-note i {
-      color: #3b82f6;
+    .btn-start:hover i {
+      transform: translateX(8px);
     }
 
     /* Адаптивность */
     @media (max-width: 480px) {
-      .auth-card {
-        padding: 2rem 1.5rem;
+      .welcome-card {
+        padding: 1.5rem 1rem;
       }
       
-      .auth-title {
-        font-size: 1.8rem;
+      .title-number .num-sign,
+      .title-number .num-52 {
+        font-size: 4rem;
       }
       
-      .input-wrapper select,
-      .input-wrapper input {
-        padding: 0.9rem 0.9rem 0.9rem 2.8rem;
+      .greeting .company-name {
+        font-size: 2.5rem;
+      }
+      
+      .quote-text {
+        font-size: 1rem;
+        min-height: 70px;
+      }
+      
+      .btn-start {
+        font-size: 1.2rem;
+        padding: 0.8rem 1.8rem;
+      }
+    }
+
+    @media (max-height: 700px) {
+      .quote-container {
+        margin: 1rem 0;
+        padding: 1rem;
+      }
+      
+      .greeting {
+        margin: 0.5rem 0 1rem;
+      }
+      
+      .title-number {
+        margin-bottom: 0.5rem;
       }
     }
   </style>
@@ -309,138 +280,84 @@
   <div class="glow"></div>
   <div class="glow-2"></div>
 
-  <!-- Карточка входа -->
-  <main class="auth-card">
-    <!-- Знак номера 52 -->
-    <div class="auth-header">
+  <!-- Карточка -->
+  <main class="welcome-card">
+    <!-- Знак номера + 52 -->
+    <div class="title-number">
       <span class="num-sign"><i class="fas fa-hashtag"></i></span>
       <span class="num-52">52</span>
     </div>
 
-    <div class="auth-title">Вход в палату</div>
+    <!-- Палата -->
+    <div class="greeting">
+      <span class="company-name">ПАЛАТА</span>
+    </div>
 
-    <!-- Форма входа -->
-    <div class="form-group">
-      <label for="username"><i class="fa-regular fa-user" style="margin-right: 0.3rem;"></i> Имя</label>
-      <div class="input-wrapper">
-        <i class="fa-regular fa-id-card"></i>
-        <select id="username">
-          <option value="" disabled selected>— Выбери имя —</option>
-          <option value="Матвей">Матвей (админ)</option>
-          <option value="Артём">Артём</option>
-          <option value="Оля">Оля</option>
-          <option value="Ксюша">Ксюша</option>
-          <option value="Ирина">Ирина</option>
-        </select>
+    <!-- Блок со случайной цитатой -->
+    <div class="quote-container">
+      <div class="quote-icon">
+        <i class="fas fa-quote-right"></i>
       </div>
-    </div>
-
-    <div class="form-group">
-      <label for="password"><i class="fa-regular fa-lock" style="margin-right: 0.3rem;"></i> Пароль</label>
-      <div class="input-wrapper">
-        <i class="fa-regular fa-key"></i>
-        <input type="password" id="password" placeholder="••••••••">
+      <div id="quoteDisplay" class="quote-text">
+        <!-- Сюда будет вставляться цитата -->
       </div>
+      <button id="refreshQuoteBtn" class="refresh-quote">
+        <i class="fas fa-sync-alt"></i> Другая
+      </button>
     </div>
 
-    <!-- Кнопка входа -->
-    <button class="btn-login" id="loginBtn">
-      Войти <i class="fa-regular fa-arrow-right-to-bracket"></i>
-    </button>
-
-    <!-- Сообщение об ошибке -->
-    <div id="errorMsg" class="error-message">
-      <i class="fa-regular fa-circle-exclamation"></i>
-      <span></span>
+    <!-- Кнопка Начать -->
+    <div class="start-button">
+      <a href="/main.html" class="btn-start">
+        Начать <i class="fas fa-arrow-right"></i>
+      </a>
     </div>
-
-    <!-- Подсказка: пока только админ -->
-    <div class="admin-note">
-      <i class="fa-regular fa-lock"></i> Сейчас вход только для админа
-    </div>
-
-    <!-- Ссылка назад на главную -->
-    <a href="index.html" class="back-link">
-      <i class="fa-regular fa-arrow-left"></i> На главную
-    </a>
   </main>
 
   <script>
-    // Данные пользователей (пока только Матвей активен)
-    const users = {
-      "Матвей": "m8012011"
-      // Остальные пока не активны
-    };
+    // Массив с цитатами (добавлены новые)
+    const quotes = [
+      "\"Артём фембой\" -Оля",
+      "\"Я так одинок...\" -Артём",
+      "\"Мама твоя\" -Оля",
+      "\"Отъебись нахуй\" -Ксюша",
+      "\"Верну в понедельник\" -Оля",
+      "\"Это Ким Чен Ын?\" -Матвей",
+      "\"Всегда перемножайте числители и знаменатели дробей\" -Ксюша",
+      "\"Мяу-мяу мяу-мяк\" -Артём",
+      "\"\" -Ирина",
+      "\"Ооооо, квадроберы\" -Ксюша",
+      "\"Маме своей так сделаешь\" -Матвей",
+      "\"БезУсЛовно\" -Артём",
+      "\"О, сластон\" -Ирина"
+    ];
 
-    // Элементы
-    const usernameSelect = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-    const loginBtn = document.getElementById('loginBtn');
-    const errorMsgDiv = document.getElementById('errorMsg');
-    const errorTextSpan = errorMsgDiv.querySelector('span');
+    // Получаем элементы
+    const quoteDisplay = document.getElementById('quoteDisplay');
+    const refreshBtn = document.getElementById('refreshQuoteBtn');
 
-    // Функция показа ошибки
-    function showError(text) {
-      errorTextSpan.textContent = text;
+    // Функция для получения случайной цитаты
+    function getRandomQuote() {
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      return quotes[randomIndex];
     }
 
-    // Функция очистки ошибки
-    function clearError() {
-      errorTextSpan.textContent = '';
+    // Функция для обновления цитаты на странице
+    function updateQuote() {
+      quoteDisplay.style.opacity = '0';
+      setTimeout(() => {
+        quoteDisplay.textContent = getRandomQuote();
+        quoteDisplay.style.opacity = '1';
+      }, 150);
     }
 
-    // Обработчик входа
-    function handleLogin() {
-      const username = usernameSelect.value;
-      const password = passwordInput.value.trim();
-
-      // Очистка предыдущей ошибки
-      clearError();
-
-      // Проверка на выбор имени
-      if (!username) {
-        showError('Выбери имя');
-        return;
-      }
-
-      // Проверка на пустой пароль
-      if (!password) {
-        showError('Введите пароль');
-        return;
-      }
-
-      // Проверяем, есть ли такой пользователь в базе (только Матвей)
-      if (users.hasOwnProperty(username)) {
-        // Совпадает ли пароль
-        if (users[username] === password) {
-          // Успешный вход
-          window.location.href = '/main.html';
-        } else {
-          showError('Неверный пароль');
-        }
-      } else {
-        // Если пользователь не Матвей (выбрали другое имя)
-        showError('Вход временно недоступен для этого пользователя');
-      }
-    }
-
-    // Клик по кнопке
-    loginBtn.addEventListener('click', handleLogin);
-
-    // Нажатие Enter в поле пароля
-    passwordInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        handleLogin();
-      }
+    // Загружаем первую случайную цитату при открытии страницы
+    window.addEventListener('DOMContentLoaded', () => {
+      quoteDisplay.textContent = getRandomQuote();
     });
 
-    // Очищаем ошибку при смене имени
-    usernameSelect.addEventListener('change', clearError);
-    passwordInput.addEventListener('input', clearError);
-
-    // Изначально очищаем ошибку
-    clearError();
+    // Обработчик на кнопку
+    refreshBtn.addEventListener('click', updateQuote);
   </script>
 </body>
 </html>
