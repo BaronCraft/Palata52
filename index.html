@@ -70,7 +70,7 @@
       z-index: 0;
     }
 
-    /* Главная карточка — минималистичная */
+    /* Главная карточка */
     .welcome-card {
       position: relative;
       z-index: 10;
@@ -93,7 +93,7 @@
       transform: scale(1.01);
     }
 
-    /* Мини-шапка только с иконкой (без лишнего текста) */
+    /* Иконка */
     .company-header {
       display: flex;
       justify-content: center;
@@ -106,7 +106,7 @@
       filter: drop-shadow(0 0 15px #3b82f6);
     }
 
-    /* Крупный номер — то, что нужно */
+    /* Крупный номер */
     .title-number {
       display: flex;
       align-items: center;
@@ -136,7 +136,7 @@
       text-shadow: 0 0 25px rgba(59,130,246,0.6);
     }
 
-    /* Приветствие ровно одной фразой */
+    /* Палата */
     .greeting {
       margin: 1.5rem 0 2rem 0;
     }
@@ -152,27 +152,99 @@
       letter-spacing: 2px;
     }
 
-    /* Нижняя плашка — минимально, только номер */
-    .footer-note {
-      margin-top: 3rem;
-      font-size: 1.2rem;
-      color: #5f7999;
+    /* Блок с цитатой */
+    .quote-container {
+      margin: 3rem 0;
+      padding: 2rem;
+      background: rgba(0, 100, 255, 0.05);
+      border-radius: 2rem;
+      border: 1px solid rgba(0, 150, 255, 0.2);
+      position: relative;
+    }
+
+    .quote-icon {
+      font-size: 2rem;
+      color: #3b82f6;
+      opacity: 0.5;
+      margin-bottom: 1rem;
+    }
+
+    .quote-text {
+      font-size: 1.3rem;
+      line-height: 1.6;
+      color: #b0d0ff;
+      font-style: italic;
+      max-width: 600px;
+      margin: 0 auto 1.5rem;
+      min-height: 100px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.8rem;
-      border-top: 1px dashed #1e3f60;
-      padding-top: 2rem;
+      transition: opacity 0.3s ease;
     }
 
-    .footer-note i {
-      color: #2563eb;
+    .refresh-quote {
+      background: transparent;
+      border: 1px solid #3b82f6;
+      color: #3b82f6;
+      padding: 0.5rem 1.5rem;
+      border-radius: 60px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .refresh-quote:hover {
+      background: rgba(59, 130, 246, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+    }
+
+    .refresh-quote i {
+      font-size: 1rem;
+    }
+
+    /* Кнопка Начать */
+    .start-button {
+      margin: 2rem 0 1rem;
+    }
+
+    .btn-start {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
       font-size: 1.5rem;
+      padding: 1.2rem 4rem;
+      border-radius: 60px;
+      box-shadow: 0 15px 30px -5px #2563eb80;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      letter-spacing: 1px;
     }
 
-    .footer-note span {
-      font-weight: 500;
-      letter-spacing: 1px;
+    .btn-start i {
+      font-size: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .btn-start:hover {
+      background: #3b82f6;
+      box-shadow: 0 25px 40px -5px #2563eb;
+      transform: scale(1.05);
+      gap: 1.5rem;
+    }
+
+    .btn-start:hover i {
+      transform: translateX(10px);
     }
 
     /* Адаптивность */
@@ -187,6 +259,13 @@
       .greeting .company-name {
         font-size: 2.5rem;
       }
+      .quote-text {
+        font-size: 1.1rem;
+      }
+      .btn-start {
+        font-size: 1.2rem;
+        padding: 1rem 2.5rem;
+      }
     }
   </style>
 </head>
@@ -196,29 +275,85 @@
   <div class="glow"></div>
   <div class="glow-2"></div>
 
-  <!-- Карточка только с необходимыми элементами -->
+  <!-- Карточка -->
   <main class="welcome-card">
-    <!-- Иконка вместо лишнего текста -->
+    <!-- Иконка -->
     <div class="company-header">
       <i class="fas fa-crown"></i>
     </div>
 
-    <!-- Знак номера + 52 (как вы просили) -->
+    <!-- Знак номера + 52 -->
     <div class="title-number">
       <span class="num-sign"><i class="fas fa-hashtag"></i></span>
       <span class="num-52">52</span>
     </div>
 
-    <!-- Приветствие. Только "Палата" — без описаний -->
+    <!-- Палата -->
     <div class="greeting">
       <span class="company-name">ПАЛАТА</span>
     </div>
 
-    <!-- Нижняя платка с отсылкой на номер, без лишних фраз -->
-    <div class="footer-note">
-      <i class="fa-solid fa-hashtag"></i>
-      <span>№52</span>
+    <!-- Блок со случайной цитатой -->
+    <div class="quote-container">
+      <div class="quote-icon">
+        <i class="fas fa-quote-right"></i>
+      </div>
+      <div id="quoteDisplay" class="quote-text">
+        <!-- Сюда будет вставляться цитата -->
+      </div>
+      <button id="refreshQuoteBtn" class="refresh-quote">
+        <i class="fas fa-sync-alt"></i> Другая цитата
+      </button>
+    </div>
+
+    <!-- Кнопка Начать -->
+    <div class="start-button">
+      <a href="/main.html" class="btn-start">
+        Начать <i class="fas fa-arrow-right"></i>
+      </a>
     </div>
   </main>
+
+  <script>
+    // Массив с цитатами (замените на свои)
+    const quotes = [
+      "В этом месте даже стены помогают... забыть, зачем ты пришёл.",
+      "Собраться вместе — это начало. Остаться вместе — это прогресс. Думать вместе — это Палата №52.",
+      "Тишина здесь звучит громче слов, особенно когда все говорят одновременно.",
+      "Добро пожаловать в клуб, где номер 52 — это не просто число, а пропуск в лучшую компанию.",
+      "Говорят, у нас есть план. Но мы просто любим тусоваться.",
+      "52 причины остаться здесь навсегда.",
+      "Правило Палаты: не обсуждать Палату. Ладно, обсуждаем, но с пиццей.",
+      "Тёмная тема включена, байки разгоняются, вечер начинается."
+    ];
+
+    // Получаем элементы
+    const quoteDisplay = document.getElementById('quoteDisplay');
+    const refreshBtn = document.getElementById('refreshQuoteBtn');
+
+    // Функция для получения случайной цитаты
+    function getRandomQuote() {
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      return quotes[randomIndex];
+    }
+
+    // Функция для обновления цитаты на странице
+    function updateQuote() {
+      // Добавляем небольшой эффект исчезновения/появления
+      quoteDisplay.style.opacity = '0';
+      setTimeout(() => {
+        quoteDisplay.textContent = getRandomQuote();
+        quoteDisplay.style.opacity = '1';
+      }, 150);
+    }
+
+    // Загружаем первую случайную цитату при открытии страницы
+    window.addEventListener('DOMContentLoaded', () => {
+      quoteDisplay.textContent = getRandomQuote();
+    });
+
+    // Обработчик на кнопку
+    refreshBtn.addEventListener('click', updateQuote);
+  </script>
 </body>
 </html>
