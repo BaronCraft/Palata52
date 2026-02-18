@@ -7,8 +7,12 @@
   <link rel="icon" href="/Логотипчик.jpg" type="image/jpeg">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"></script>
+  
   <style>
-    /* Стили как в предыдущей версии */
     * {
       margin: 0;
       padding: 0;
@@ -147,7 +151,6 @@
       align-items: center;
     }
 
-    .input-wrapper select,
     .input-wrapper input {
       width: 100%;
       padding: 1rem 3rem 1rem 1.5rem;
@@ -158,25 +161,9 @@
       font-size: 1rem;
       color: white;
       transition: all 0.2s;
-      appearance: none;
-      -webkit-appearance: none;
     }
 
-    .input-wrapper select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      background-size: 1.2rem;
-      cursor: pointer;
-    }
-
-    .input-wrapper select option {
-      background: #0a1a2a;
-      color: white;
-    }
-
-    .input-wrapper input:focus,
-    .input-wrapper select:focus {
+    .input-wrapper input:focus {
       outline: none;
       border-color: #3b82f6;
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
@@ -293,7 +280,6 @@
         font-size: 4rem;
       }
       
-      .input-wrapper select,
       .input-wrapper input {
         padding: 0.9rem 3rem 0.9rem 1.2rem;
       }
@@ -314,16 +300,9 @@
     <div class="auth-title">Вход в палату</div>
 
     <div class="form-group">
-      <label>Имя</label>
+      <label>Email</label>
       <div class="input-wrapper">
-        <select id="username" required>
-          <option value="" disabled selected>— Выбери имя —</option>
-          <option value="Матвей">Матвей</option>
-          <option value="Артём">Артём</option>
-          <option value="Оля">Оля</option>
-          <option value="Ксюша">Ксюша</option>
-          <option value="Ирина">Ирина</option>
-        </select>
+        <input type="email" id="email" placeholder="matvey@palata52.ru" required>
       </div>
     </div>
 
@@ -350,34 +329,29 @@
   </main>
 
   <script>
-    // ========== БЕЗОПАСНОСТЬ ==========
-    // Пароля НЕТ в коде! Только хеш, который невозможно расшифровать
-    
-    // Сгенерированный хеш для пароля "m8012011" + секретная соль
-    // Даже если увидят этот хеш - пароль не восстановить!
-    const SECRET_HASH = "8e6f5f7e2e3b4a5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c";
-    
-    // Секретная соль (тоже в хеше, не видна)
-    const SALT = "палата52секретныйключ";
-    
-    // Функция хеширования (используем SHA-256 через библиотеку)
-    async function hashPassword(password) {
-        // Кодируем пароль + соль
-        const encoder = new TextEncoder();
-        const data = encoder.encode(password + SALT);
-        
-        // Используем встроенный криптографический API браузера
-        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-        
-        // Преобразуем в hex строку
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        
-        return hashHex;
-    }
+    // 🔥 КОНФИГУРАЦИЯ FIREBASE - ЗАМЕНИТЕ НА СВОЮ!
+    const firebaseConfig = {
+      apiKey: "AIzaSyBp8lPkLHxK8QjZ9QvG7cH5dM2sN4tR6vY",
+      authDomain: "palata52.firebaseapp.com",
+      projectId: "palata52",
+      storageBucket: "palata52.firebasestorage.app",
+      messagingSenderId: "123456789012",
+      appId: "1:123456789012:web:abc123def456"
+    };
+
+    // Инициализация Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Для отладки - кто вошёл
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log("Пользователь вошёл:", user.email);
+      }
+    });
 
     // Элементы
-    const usernameSelect = document.getElementById('username');
+    const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const togglePassword = document.getElementById('togglePassword');
     const loginBtn = document.getElementById('loginBtn');
@@ -388,7 +362,6 @@
     togglePassword.addEventListener('click', function() {
       const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
       passwordInput.setAttribute('type', type);
-      
       const icon = this.querySelector('i');
       if (type === 'password') {
         icon.classList.remove('bi-eye-slash');
@@ -403,10 +376,6 @@
       errorMsg.textContent = text;
     }
 
-    function clearError() {
-      errorMsg.textContent = '';
-    }
-
     function setLoading(isLoading) {
       if (isLoading) {
         loginBtn.classList.add('loading');
@@ -418,13 +387,13 @@
     }
 
     async function handleLogin() {
-      const username = usernameSelect.value;
+      const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
 
-      clearError();
+      showError('');
 
-      if (!username) {
-        showError('Выбери имя');
+      if (!email) {
+        showError('Введи email');
         return;
       }
 
@@ -435,34 +404,44 @@
 
       setLoading(true);
 
-      // Имитация задержки (для красоты)
-      setTimeout(async () => {
-        try {
-            // Хешируем введённый пароль
-            const inputHash = await hashPassword(password);
-            
-            // Сравниваем с сохранённым хешем
-            if (username === 'Матвей' && inputHash === SECRET_HASH) {
-                // Успешный вход
-                localStorage.setItem('user', JSON.stringify({
-                    username: username,
-                    loginTime: new Date().toISOString()
-                }));
-                window.location.href = '/messenger.html';
-            } else if (username !== 'Матвей') {
-                showError('Вход временно недоступен для этого пользователя');
-                setLoading(false);
-            } else {
-                showError('Неверный пароль');
-                setLoading(false);
-            }
-        } catch (error) {
-            showError('Ошибка при проверке пароля');
-            setLoading(false);
+      try {
+        // Вход через Firebase
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        
+        // Успешный вход
+        localStorage.setItem('user', JSON.stringify({
+          email: userCredential.user.email,
+          uid: userCredential.user.uid,
+          loginTime: new Date().toISOString()
+        }));
+        
+        window.location.href = '/messenger.html';
+        
+      } catch (error) {
+        console.error("Ошибка входа:", error);
+        
+        // Понятные сообщения об ошибках
+        switch(error.code) {
+          case 'auth/user-not-found':
+            showError('Пользователь не найден');
+            break;
+          case 'auth/wrong-password':
+            showError('Неверный пароль');
+            break;
+          case 'auth/invalid-email':
+            showError('Неверный формат email');
+            break;
+          case 'auth/too-many-requests':
+            showError('Слишком много попыток. Попробуй позже');
+            break;
+          default:
+            showError('Ошибка входа: ' + error.message);
         }
-      }, 500);
+        setLoading(false);
+      }
     }
 
+    // Обработчики
     loginBtn.addEventListener('click', handleLogin);
     
     passwordInput.addEventListener('keypress', (e) => {
@@ -472,8 +451,15 @@
       }
     });
 
-    usernameSelect.addEventListener('change', clearError);
-    passwordInput.addEventListener('input', clearError);
+    emailInput.addEventListener('input', () => showError(''));
+    passwordInput.addEventListener('input', () => showError(''));
+
+    // Если уже вошли - сразу в мессенджер
+    auth.onAuthStateChanged((user) => {
+      if (user && window.location.pathname.includes('authorize.html')) {
+        window.location.href = '/messenger.html';
+      }
+    });
   </script>
 </body>
 </html>
