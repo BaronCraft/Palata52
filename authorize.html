@@ -6,11 +6,11 @@
   <title>Вход · Палата №52</title>
   <!-- Фавикон -->
   <link rel="icon" href="/Логотипчик.jpg" type="image/jpeg">
-  <!-- Шрифт Inter (как было в оригинале) -->
+  <!-- Шрифт Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-  <!-- Bootstrap Icons (только для глазика) -->
+  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <style>
     * {
@@ -32,7 +32,6 @@
       padding: 1rem;
     }
 
-    /* Фоновые эффекты (оригинальные) */
     .background-grid {
       position: absolute;
       top: 0;
@@ -71,7 +70,6 @@
       z-index: 0;
     }
 
-    /* Карточка (оригинальная) */
     .auth-card {
       position: relative;
       z-index: 10;
@@ -94,7 +92,6 @@
       transform: scale(1.01);
     }
 
-    /* Шапка с номером (оригинальная) */
     .auth-header {
       display: flex;
       align-items: center;
@@ -133,7 +130,6 @@
       background-clip: text;
     }
 
-    /* Форма (оригинальная) */
     .form-group {
       margin-bottom: 1.5rem;
       text-align: left;
@@ -196,7 +192,6 @@
       font-style: italic;
     }
 
-    /* Кнопка показа пароля (новая) */
     .password-toggle {
       position: absolute;
       right: 1rem;
@@ -218,7 +213,6 @@
       opacity: 1;
     }
 
-    /* Кнопка входа (оригинальная, с доработками) */
     .btn-login {
       width: 100%;
       background: #2563eb;
@@ -250,7 +244,6 @@
       box-shadow: 0 20px 30px -5px #1e4bae;
     }
 
-    /* Спиннер загрузки (новый) */
     .spinner {
       display: none;
       width: 1.2rem;
@@ -312,14 +305,11 @@
   </style>
 </head>
 <body>
-  <!-- Фоновые эффекты -->
   <div class="background-grid"></div>
   <div class="glow"></div>
   <div class="glow-2"></div>
 
-  <!-- Карточка входа -->
   <main class="auth-card">
-    <!-- Знак номера 52 (как было в оригинале) -->
     <div class="auth-header">
       <span class="num-sign">#</span>
       <span class="num-52">52</span>
@@ -327,7 +317,6 @@
 
     <div class="auth-title">Вход в палату</div>
 
-    <!-- Форма -->
     <div class="form-group">
       <label>Имя</label>
       <div class="input-wrapper">
@@ -352,28 +341,19 @@
       </div>
     </div>
 
-    <!-- Кнопка входа -->
     <button class="btn-login" id="loginBtn">
       <span>Войти</span>
       <span class="spinner" id="spinner"></span>
     </button>
 
-    <!-- Сообщение об ошибке -->
     <div id="errorMsg" class="error-message"></div>
 
-    <!-- Ссылка назад -->
     <a href="index.html" class="back-link">
       ← На главную
     </a>
   </main>
 
   <script>
-    // Данные пользователей (только Матвей)
-    const users = {
-      "Матвей": "m8012011"
-    };
-
-    // Элементы
     const usernameSelect = document.getElementById('username');
     const passwordInput = document.getElementById('password');
     const togglePassword = document.getElementById('togglePassword');
@@ -381,7 +361,6 @@
     const errorMsg = document.getElementById('errorMsg');
     const spinner = document.getElementById('spinner');
 
-    // Показать/скрыть пароль
     togglePassword.addEventListener('click', function() {
       const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
       passwordInput.setAttribute('type', type);
@@ -432,31 +411,23 @@
 
       setLoading(true);
 
-      // Небольшая задержка для показа спиннера
       setTimeout(() => {
-        // Проверка: только Матвей
-        if (username !== 'Матвей') {
-          showError('Вход временно недоступен для этого пользователя');
-          setLoading(false);
-          return;
-        }
-
-        // Проверка пароля
-        if (users[username] === password) {
-          // Успешный вход
+        if (username === 'Матвей' && password === 'm8012011') {
           localStorage.setItem('user', JSON.stringify({
             username: username,
             loginTime: new Date().toISOString()
           }));
           window.location.href = '/messenger.html';
+        } else if (username !== 'Матвей') {
+          showError('Вход временно недоступен для этого пользователя');
+          setLoading(false);
         } else {
           showError('Неверный пароль');
           setLoading(false);
         }
-      }, 500); // Небольшая задержка для красоты
+      }, 500);
     }
 
-    // События
     loginBtn.addEventListener('click', handleLogin);
     
     passwordInput.addEventListener('keypress', (e) => {
