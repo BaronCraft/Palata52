@@ -1,4 +1,6 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header('X-Content-Type-Options: nosniff');
 // Начинаем сессию для хранения информации о входе
 session_start();
 
