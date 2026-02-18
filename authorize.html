@@ -4,193 +4,376 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Вход · Палата №52</title>
+  <!-- Фавикон -->
   <link rel="icon" href="/Логотипчик.jpg" type="image/jpeg">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Шрифт Inter (как было в оригинале) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <!-- Bootstrap Icons (только для глазика) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background: linear-gradient(135deg, #0a0f1a 0%, #1a1f2e 100%);
+      background-color: #0a0f1a;
+      font-family: 'Inter', sans-serif;
+      color: #e0e6f0;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      position: relative;
+      overflow-x: hidden;
+      padding: 1rem;
     }
-    
+
+    /* Фоновые эффекты (оригинальные) */
+    .background-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 100, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 100, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .glow {
+      position: absolute;
+      width: 80vh;
+      height: 80vh;
+      background: radial-gradient(circle at 30% 30%, rgba(0, 120, 255, 0.15), transparent 70%);
+      top: -20vh;
+      right: -10vw;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: 0;
+    }
+
+    .glow-2 {
+      position: absolute;
+      width: 100vh;
+      height: 100vh;
+      background: radial-gradient(circle at 70% 80%, rgba(0, 180, 255, 0.1), transparent 70%);
+      bottom: -30vh;
+      left: -10vw;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: 0;
+    }
+
+    /* Карточка (оригинальная) */
     .auth-card {
-      background: rgba(20, 30, 45, 0.8);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(0, 150, 255, 0.2);
-      border-radius: 2rem;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 160, 255, 0.2) inset;
-      transition: transform 0.3s ease;
-      max-width: 450px;
-      width: 90%;
-      margin: 1rem;
+      position: relative;
+      z-index: 10;
+      max-width: 500px;
+      width: 100%;
+      margin: 1rem auto;
+      padding: 2.5rem 2rem;
+      background: rgba(10, 18, 30, 0.6);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(0, 150, 255, 0.15);
+      border-radius: 2.5rem;
+      box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 160, 255, 0.1) inset;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
     }
-    
+
     .auth-card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 25px 50px rgba(0, 100, 255, 0.3), 0 0 0 1px rgba(0, 180, 255, 0.3) inset;
+      box-shadow: 0 40px 70px -10px rgba(0, 100, 255, 0.3), 0 0 0 1px rgba(0, 180, 255, 0.2) inset;
+      transform: scale(1.01);
     }
-    
-    .brand-number {
-      font-size: 4rem;
-      font-weight: 800;
-      line-height: 1;
+
+    /* Шапка с номером (оригинальная) */
+    .auth-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .auth-header .num-sign {
+      font-size: 5rem;
       background: linear-gradient(135deg, #3b82f6, #00a6ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 15px #3b82f6);
-      text-shadow: 0 0 30px rgba(59,130,246,0.5);
+      background-clip: text;
+      filter: drop-shadow(0 0 20px #3b82f6);
     }
-    
-    .brand-text {
-      font-size: 2.5rem;
-      font-weight: 700;
+
+    .auth-header .num-52 {
+      font-size: 5rem;
       background: linear-gradient(135deg, #ffffff, #a0c8ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      letter-spacing: 2px;
+      background-clip: text;
+      text-shadow: 0 0 25px rgba(59,130,246,0.6);
     }
-    
-    .form-control, .form-select {
-      background: rgba(10, 20, 30, 0.7);
-      border: 1px solid #2a3f5f;
-      color: white;
-      padding: 0.8rem 1.2rem;
+
+    .auth-title {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      background: linear-gradient(135deg, #d6e6ff, #80b4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Форма (оригинальная) */
+    .form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #a0c0ff;
+      font-weight: 500;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper select,
+    .input-wrapper input {
+      width: 100%;
+      padding: 1rem 3rem 1rem 1.5rem;
+      background: rgba(0, 20, 40, 0.5);
+      border: 1px solid #1e3f60;
       border-radius: 60px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      color: white;
       transition: all 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
     }
-    
-    .form-control:focus, .form-select:focus {
-      background: rgba(20, 30, 45, 0.9);
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+
+    .input-wrapper select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .input-wrapper select option {
+      background: #0a1a2a;
       color: white;
     }
-    
-    .form-control::placeholder {
-      color: #6c7a92;
+
+    .input-wrapper input:focus,
+    .input-wrapper select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+      background: rgba(0, 30, 60, 0.6);
     }
-    
-    .form-select {
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%233b82f6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+
+    .input-wrapper input::placeholder {
+      color: #5f7999;
+      font-style: italic;
     }
-    
-    .input-group-text {
-      background: rgba(10, 20, 30, 0.7);
-      border: 1px solid #2a3f5f;
-      border-right: none;
-      border-radius: 60px 0 0 60px;
+
+    /* Кнопка показа пароля (новая) */
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      background: transparent;
+      border: none;
       color: #3b82f6;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      padding: 0.25rem;
+      z-index: 2;
     }
-    
-    .input-group .form-control {
-      border-left: none;
-      border-radius: 0 60px 60px 0;
+
+    .password-toggle:hover {
+      opacity: 1;
     }
-    
+
+    /* Кнопка входа (оригинальная, с доработками) */
     .btn-login {
-      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      width: 100%;
+      background: #2563eb;
       border: none;
       color: white;
       font-weight: 600;
       font-size: 1.2rem;
-      padding: 0.8rem;
+      padding: 1rem;
       border-radius: 60px;
-      box-shadow: 0 8px 20px -5px #2563eb80;
-      transition: all 0.3s ease;
-      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      cursor: pointer;
+      box-shadow: 0 10px 25px -5px #2563eb80;
+      transition: all 0.2s;
+      border: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 1rem;
       position: relative;
     }
-    
-    .btn-login:hover:not(:disabled) {
-      background: linear-gradient(135deg, #3b82f6, #60a5fa);
-      box-shadow: 0 15px 30px -5px #2563eb;
-      transform: translateY(-2px);
-    }
-    
+
     .btn-login:disabled {
       opacity: 0.7;
+      cursor: not-allowed;
     }
-    
-    .spinner-border-sm {
+
+    .btn-login:hover:not(:disabled) {
+      background: #3b82f6;
+      box-shadow: 0 20px 30px -5px #1e4bae;
+    }
+
+    /* Спиннер загрузки (новый) */
+    .spinner {
+      display: none;
       width: 1.2rem;
       height: 1.2rem;
-      border-width: 0.2em;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
       margin-left: 0.5rem;
     }
-    
+
+    .btn-login.loading .spinner {
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     .error-message {
-      color: #ff8a8a;
+      color: #ff6b6b;
       font-size: 0.9rem;
-      margin-top: 0.5rem;
+      margin: 1rem 0;
       min-height: 1.5rem;
     }
-    
+
     .back-link {
-      color: #6c7a92;
+      display: inline-block;
+      color: #5f7999;
       text-decoration: none;
+      font-size: 0.9rem;
       transition: color 0.2s;
+      margin-top: 1rem;
     }
-    
+
     .back-link:hover {
       color: #3b82f6;
+    }
+
+    @media (max-width: 480px) {
+      .auth-card {
+        padding: 2rem 1.5rem;
+      }
+      
+      .auth-title {
+        font-size: 1.8rem;
+      }
+      
+      .auth-header .num-sign,
+      .auth-header .num-52 {
+        font-size: 4rem;
+      }
+      
+      .input-wrapper select,
+      .input-wrapper input {
+        padding: 0.9rem 3rem 0.9rem 1.2rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="auth-card p-4 p-md-5">
-    <div class="text-center mb-4">
-      <div class="brand-number">#52</div>
-      <div class="brand-text">ПАЛАТА</div>
+  <!-- Фоновые эффекты -->
+  <div class="background-grid"></div>
+  <div class="glow"></div>
+  <div class="glow-2"></div>
+
+  <!-- Карточка входа -->
+  <main class="auth-card">
+    <!-- Знак номера 52 (как было в оригинале) -->
+    <div class="auth-header">
+      <span class="num-sign">#</span>
+      <span class="num-52">52</span>
     </div>
-    
-    <h2 class="text-center mb-4" style="color: #b0d0ff; font-weight: 500;">Вход</h2>
-    
-    <div class="mb-4">
-      <label class="form-label text-secondary-emphasis">Имя</label>
-      <select class="form-select" id="username">
-        <option value="" selected disabled>— Выбери имя —</option>
-        <option value="Матвей">Матвей</option>
-        <option value="Артём">Артём</option>
-        <option value="Оля">Оля</option>
-        <option value="Ксюша">Ксюша</option>
-        <option value="Ирина">Ирина</option>
-      </select>
+
+    <div class="auth-title">Вход в палату</div>
+
+    <!-- Форма -->
+    <div class="form-group">
+      <label>Имя</label>
+      <div class="input-wrapper">
+        <select id="username">
+          <option value="" disabled selected>— Выбери имя —</option>
+          <option value="Матвей">Матвей</option>
+          <option value="Артём">Артём</option>
+          <option value="Оля">Оля</option>
+          <option value="Ксюша">Ксюша</option>
+          <option value="Ирина">Ирина</option>
+        </select>
+      </div>
     </div>
-    
-    <div class="mb-4">
-      <label class="form-label text-secondary-emphasis">Пароль</label>
-      <div class="input-group">
-        <span class="input-group-text"><i class="bi bi-key"></i></span>
-        <input type="password" class="form-control" id="password" placeholder="••••••••">
-        <button class="btn btn-outline-secondary border-start-0" type="button" id="togglePassword" style="border-radius: 0 60px 60px 0; border-color: #2a3f5f; background: rgba(10,20,30,0.7); color: #3b82f6;">
+
+    <div class="form-group">
+      <label>Пароль</label>
+      <div class="input-wrapper">
+        <input type="password" id="password" placeholder="••••••••">
+        <button class="password-toggle" id="togglePassword" type="button">
           <i class="bi bi-eye"></i>
         </button>
       </div>
     </div>
-    
-    <button class="btn-login d-flex align-items-center justify-content-center" id="loginBtn">
+
+    <!-- Кнопка входа -->
+    <button class="btn-login" id="loginBtn">
       <span>Войти</span>
-      <span class="spinner-border spinner-border-sm d-none" id="spinner" role="status"></span>
+      <span class="spinner" id="spinner"></span>
     </button>
-    
-    <div id="errorMsg" class="error-message text-center"></div>
-    
-    <div class="text-center mt-4">
-      <a href="index.html" class="back-link">
-        <i class="bi bi-arrow-left me-1"></i> На главную
-      </a>
-    </div>
-  </div>
+
+    <!-- Сообщение об ошибке -->
+    <div id="errorMsg" class="error-message"></div>
+
+    <!-- Ссылка назад -->
+    <a href="index.html" class="back-link">
+      ← На главную
+    </a>
+  </main>
 
   <script>
+    // Данные пользователей (только Матвей)
     const users = {
       "Матвей": "m8012011"
     };
 
+    // Элементы
     const usernameSelect = document.getElementById('username');
     const passwordInput = document.getElementById('password');
     const togglePassword = document.getElementById('togglePassword');
@@ -198,9 +381,11 @@
     const errorMsg = document.getElementById('errorMsg');
     const spinner = document.getElementById('spinner');
 
+    // Показать/скрыть пароль
     togglePassword.addEventListener('click', function() {
       const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
       passwordInput.setAttribute('type', type);
+      
       const icon = this.querySelector('i');
       if (type === 'password') {
         icon.classList.remove('bi-eye-slash');
@@ -221,11 +406,11 @@
 
     function setLoading(isLoading) {
       if (isLoading) {
+        loginBtn.classList.add('loading');
         loginBtn.disabled = true;
-        spinner.classList.remove('d-none');
       } else {
+        loginBtn.classList.remove('loading');
         loginBtn.disabled = false;
-        spinner.classList.add('d-none');
       }
     }
 
@@ -247,14 +432,18 @@
 
       setLoading(true);
 
+      // Небольшая задержка для показа спиннера
       setTimeout(() => {
+        // Проверка: только Матвей
         if (username !== 'Матвей') {
           showError('Вход временно недоступен для этого пользователя');
           setLoading(false);
           return;
         }
 
+        // Проверка пароля
         if (users[username] === password) {
+          // Успешный вход
           localStorage.setItem('user', JSON.stringify({
             username: username,
             loginTime: new Date().toISOString()
@@ -264,9 +453,10 @@
           showError('Неверный пароль');
           setLoading(false);
         }
-      }, 500);
+      }, 500); // Небольшая задержка для красоты
     }
 
+    // События
     loginBtn.addEventListener('click', handleLogin);
     
     passwordInput.addEventListener('keypress', (e) => {
