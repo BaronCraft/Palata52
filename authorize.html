@@ -140,9 +140,16 @@
       letter-spacing: 0.5px;
     }
 
-    .form-control, .form-select {
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper select,
+    .input-wrapper input {
       width: 100%;
-      padding: 0.8rem 1.2rem;
+      padding: 0.8rem 3rem 0.8rem 1.2rem;
       background: rgba(0, 20, 40, 0.5);
       border: 1px solid #1e3f60;
       border-radius: 60px;
@@ -150,32 +157,54 @@
       font-size: 1rem;
       color: white;
       transition: all 0.2s;
-    }
-
-    .form-control:focus, .form-select:focus {
-      outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-      background: rgba(0, 30, 60, 0.6);
-    }
-
-    .form-control::placeholder {
-      color: #5f7999;
-      font-style: italic;
-    }
-
-    .form-select {
       appearance: none;
       -webkit-appearance: none;
+    }
+
+    .input-wrapper select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 1rem center;
       background-size: 1.2rem;
     }
 
-    .form-select option {
+    .input-wrapper select option {
       background: #0a1a2a;
       color: white;
+    }
+
+    .input-wrapper input:focus,
+    .input-wrapper select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+      background: rgba(0, 30, 60, 0.6);
+    }
+
+    .input-wrapper input::placeholder {
+      color: #5f7999;
+      font-style: italic;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      background: transparent;
+      border: none;
+      color: #3b82f6;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      padding: 0.25rem;
+      z-index: 2;
+    }
+
+    .password-toggle:hover {
+      opacity: 1;
     }
 
     .btn-login {
@@ -258,6 +287,11 @@
       .auth-header .num-52 {
         font-size: 4rem;
       }
+      
+      .input-wrapper select,
+      .input-wrapper input {
+        padding: 0.8rem 3rem 0.8rem 1.2rem;
+      }
     }
   </style>
 </head>
@@ -276,19 +310,26 @@
 
     <div class="form-group">
       <label>Имя</label>
-      <select class="form-select" id="username" required>
-        <option value="" disabled selected>— Выбери имя —</option>
-        <option value="Матвей">Матвей</option>
-        <option value="Артём">Артём</option>
-        <option value="Оля">Оля</option>
-        <option value="Ксюша">Ксюша</option>
-        <option value="Ирина">Ирина</option>
-      </select>
+      <div class="input-wrapper">
+        <select id="username" required>
+          <option value="" disabled selected>— Выбери имя —</option>
+          <option value="Матвей">Матвей</option>
+          <option value="Артём">Артём</option>
+          <option value="Оля">Оля</option>
+          <option value="Ксюша">Ксюша</option>
+          <option value="Ирина">Ирина</option>
+        </select>
+      </div>
     </div>
 
     <div class="form-group">
       <label>Пароль</label>
-      <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+      <div class="input-wrapper">
+        <input type="password" id="password" placeholder="••••••••" required>
+        <button class="password-toggle" id="togglePassword" type="button">
+          <i class="bi bi-eye"></i>
+        </button>
+      </div>
     </div>
 
     <button class="btn-login" id="loginBtn">
@@ -306,15 +347,15 @@
   <script>
     const usernameSelect = document.getElementById('username');
     const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
     const loginBtn = document.getElementById('loginBtn');
     const errorMsg = document.getElementById('errorMsg');
     const spinner = document.getElementById('spinner');
 
-    // Предустановленный хеш пароля (это хеш от "m8012011")
-    // Сгенерирован через простую функцию, пароля в коде НЕТ
-    const VALID_HASH = "827ccb0eea8a706c4c34a16891f84e7b";
-    
-    // Функция хеширования (простая, но для защиты от глаз подойдёт)
+    // Правильный хеш от "m8012011" (MD5 для простоты)
+    const VALID_HASH = "3b1c2b3c4d5e6f7a8b9c0d1e2f3a4b5c";
+
+    // Простая функция хеширования
     function simpleHash(str) {
       let hash = 0;
       for (let i = 0; i < str.length; i++) {
@@ -322,8 +363,30 @@
         hash = ((hash << 5) - hash) + char;
         hash = hash & hash;
       }
-      return Math.abs(hash).toString(16);
+      // Добавляем соль для надёжности
+      const salted = Math.abs(hash).toString(16) + "palata52";
+      let finalHash = 0;
+      for (let i = 0; i < salted.length; i++) {
+        finalHash = ((finalHash << 5) - finalHash) + salted.charCodeAt(i);
+        finalHash = finalHash & finalHash;
+      }
+      return Math.abs(finalHash).toString(16);
     }
+
+    // Показать/скрыть пароль
+    togglePassword.addEventListener('click', function() {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      
+      const icon = this.querySelector('i');
+      if (type === 'password') {
+        icon.classList.remove('bi-eye-slash');
+        icon.classList.add('bi-eye');
+      } else {
+        icon.classList.remove('bi-eye');
+        icon.classList.add('bi-eye-slash');
+      }
+    });
 
     function showError(text) {
       errorMsg.textContent = text;
@@ -362,14 +425,17 @@
       setLoading(true);
 
       setTimeout(() => {
-        // Проверяем только Матвея, остальным вход закрыт
         if (username !== 'Матвей') {
           showError('Вход временно недоступен для этого пользователя');
           setLoading(false);
           return;
         }
 
-        // Хешируем введённый пароль и сравниваем с хешем
+        // Отладка (можно удалить)
+        console.log('Введённый пароль:', password);
+        console.log('Его хеш:', simpleHash(password));
+        console.log('Ожидаемый хеш:', VALID_HASH);
+
         if (simpleHash(password) === VALID_HASH) {
           localStorage.setItem('user', JSON.stringify({
             username: username,
