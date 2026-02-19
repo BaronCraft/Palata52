@@ -32,7 +32,6 @@
       padding: 1rem;
     }
 
-    /* Фоновые эффекты */
     .background-grid {
       position: absolute;
       top: 0;
@@ -71,7 +70,6 @@
       z-index: 0;
     }
 
-    /* Главная карточка */
     .welcome-card {
       position: relative;
       z-index: 10;
@@ -94,7 +92,6 @@
       transform: scale(1.01);
     }
 
-    /* Крупный номер */
     .title-number {
       display: flex;
       align-items: center;
@@ -124,7 +121,6 @@
       text-shadow: 0 0 25px rgba(59,130,246,0.6);
     }
 
-    /* Палата */
     .greeting {
       margin: 1rem 0 1.5rem 0;
     }
@@ -140,7 +136,6 @@
       letter-spacing: 2px;
     }
 
-    /* Блок с цитатой */
     .quote-container {
       margin: 2rem 0;
       padding: 1.5rem 1rem;
@@ -191,7 +186,6 @@
       box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
     }
 
-    /* Кнопка Начать */
     .start-button {
       margin: 1.5rem 0 0.5rem;
     }
@@ -232,7 +226,6 @@
       transform: translateX(8px);
     }
 
-    /* Адаптивность */
     @media (max-width: 480px) {
       .welcome-card {
         padding: 1.5rem 1rem;
@@ -275,47 +268,39 @@
   </style>
 </head>
 <body>
-  <!-- Фон -->
   <div class="background-grid"></div>
   <div class="glow"></div>
   <div class="glow-2"></div>
 
-  <!-- Карточка -->
   <main class="welcome-card">
-    <!-- Знак номера + 52 -->
     <div class="title-number">
       <span class="num-sign"><i class="fas fa-hashtag"></i></span>
       <span class="num-52">52</span>
     </div>
 
-    <!-- Палата -->
     <div class="greeting">
       <span class="company-name">ПАЛАТА</span>
     </div>
 
-    <!-- Блок со случайной цитатой -->
     <div class="quote-container">
       <div class="quote-icon">
         <i class="fas fa-quote-right"></i>
       </div>
-      <div id="quoteDisplay" class="quote-text">
-        <!-- Сюда будет вставляться цитата -->
-      </div>
+      <div id="quoteDisplay" class="quote-text"></div>
       <button id="refreshQuoteBtn" class="refresh-quote">
-        <i class="fas fa-sync-alt"></i> Другая цитата
+        <i class="fas fa-sync-alt"></i> Другая
       </button>
     </div>
 
-    <!-- Кнопка Начать -->
     <div class="start-button">
-      <a href="/authorize.html" class="btn-start">
+      <a href="authorize.html" class="btn-start">
         Начать <i class="fas fa-arrow-right"></i>
       </a>
     </div>
   </main>
 
   <script>
-    // Массив с цитатами (добавлены новые)
+    // Массив с цитатами (исправлен "мяк" на "мяу" и добавлены новые)
     const quotes = [
       "\"Артём фембой\" -Оля",
       "\"Я так одинок...\" -Артём",
@@ -324,12 +309,18 @@
       "\"Верну в понедельник\" -Оля",
       "\"Это Ким Чен Ын?\" -Матвей",
       "\"Всегда перемножайте числители и знаменатели дробей\" -Ксюша",
-      "\"Мяу-мяу мяу-мяк\" -Артём",
+      "\"Мяу-мяу мяу-мяу\" -Артём",
       "\"\" -Ирина",
       "\"Ооооо, квадроберы\" -Ксюша",
       "\"Маме своей так сделаешь\" -Матвей",
       "\"БезУсЛовно\" -Артём",
-      "\"О, сластон\" -Ирина"
+      "\"О, сластон\" -Ирина",
+      "\"Гойда\" -Матвей",
+      "\"Гойда\" -Артём", 
+      "\"Гойда\" -Ксюша",
+      "\"Гойда\" -Оля",
+      "\"Гойда\" -Ирина",
+      "\"Бля, ты тупой\" -Ксюша"
     ];
 
     // Получаем элементы
