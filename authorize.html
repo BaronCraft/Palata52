@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>Авторизация</title>
+<script>
+  // Хеш-функция (простая) для сравнения пароля
+  function hashCode(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash |= 0; // преобразование в 32bit int
+    }
+    return hash;
+  }
+
+  // Захешированный пароль Матвея: 'm8012011'
+  const validUsername = "Матвей";
+  const validPasswordHash = hashCode('m8012011');
+
+  function authorize(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    if (username !== validUsername) {
+      alert('Авторизация временно недоступна для выбранного пользователя.');
+      return;
+    }
+
+    if (hashCode(password) === validPasswordHash) {
+      alert('Авторизация успешна!');
+      // Здесь можно выполнить переход или отправку формы на сервер
+    } else {
+      alert('Неверный пароль.');
+    }
+  }
+</script>
+</head>
+<body>
+<h2>Авторизация</h2>
+<form onsubmit="authorize(event)">
+  <label for="username">Имя:</label>
+  <select id="username" name="username" required>
+    <option>Матвей</option>
+    <option>Артём</option>
+    <option>Ксюша</option>
+    <option>Оля</option>
+    <option>Ирина</option>
+  </select><br><br>
+
+  <label for="password">Пароль:</label>
+  <input type="password" id="password" name="password" required /><br><br>
+
+  <button type="submit">Войти</button>
+</form>
+</body>
+</html>
