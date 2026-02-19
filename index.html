@@ -226,6 +226,13 @@
       transform: translateX(8px);
     }
 
+    .cycle-indicator {
+      font-size: 0.8rem;
+      color: #3b82f6;
+      margin-top: 0.5rem;
+      opacity: 0.7;
+    }
+
     @media (max-width: 480px) {
       .welcome-card {
         padding: 1.5rem 1rem;
@@ -290,6 +297,7 @@
       <button id="refreshQuoteBtn" class="refresh-quote">
         <i class="fas fa-sync-alt"></i> Другая
       </button>
+      <div id="cycleIndicator" class="cycle-indicator"></div>
     </div>
 
     <div class="start-button">
@@ -300,7 +308,7 @@
   </main>
 
   <script>
-    // Массив с цитатами (исправлен "мяк" на "мяу" и добавлены новые)
+    // Массив с цитатами
     const quotes = [
       "\"Артём фембой\" -Оля",
       "\"Я так одинок...\" -Артём",
@@ -326,25 +334,55 @@
     // Получаем элементы
     const quoteDisplay = document.getElementById('quoteDisplay');
     const refreshBtn = document.getElementById('refreshQuoteBtn');
+    const cycleIndicator = document.getElementById('cycleIndicator');
 
-    // Функция для получения случайной цитаты
-    function getRandomQuote() {
-      const randomIndex = Math.floor(Math.random() * quotes.length);
-      return quotes[randomIndex];
+    // Массив для отслеживания показанных цитат
+    let shownQuotes = [];
+    let currentCycle = 1;
+
+    // Функция для получения случайной цитаты без повторов
+    function getRandomUniqueQuote() {
+      // Если все цитаты показаны, начинаем новый цикл
+      if (shownQuotes.length >= quotes.length) {
+        shownQuotes = [];
+        currentCycle++;
+        updateCycleIndicator();
+      }
+
+      // Создаем массив доступных цитат (которые еще не показывали)
+      const availableQuotes = quotes.filter((_, index) => !shownQuotes.includes(index));
+      
+      // Выбираем случайный индекс из доступных
+      const randomAvailableIndex = Math.floor(Math.random() * availableQuotes.length);
+      const quoteIndex = quotes.indexOf(availableQuotes[randomAvailableIndex]);
+      
+      // Добавляем в показанные
+      shownQuotes.push(quoteIndex);
+      
+      return quotes[quoteIndex];
+    }
+
+    // Функция обновления индикатора цикла
+    function updateCycleIndicator() {
+      const remainingQuotes = quotes.length - shownQuotes.length;
+      cycleIndicator.textContent = `Цитат в этом цикле: ${shownQuotes.length + 1}/${quotes.length}`;
     }
 
     // Функция для обновления цитаты на странице
     function updateQuote() {
       quoteDisplay.style.opacity = '0';
       setTimeout(() => {
-        quoteDisplay.textContent = getRandomQuote();
+        quoteDisplay.textContent = getRandomUniqueQuote();
         quoteDisplay.style.opacity = '1';
+        updateCycleIndicator();
       }, 150);
     }
 
     // Загружаем первую случайную цитату при открытии страницы
     window.addEventListener('DOMContentLoaded', () => {
-      quoteDisplay.textContent = getRandomQuote();
+      quoteDisplay.textContent = getRandomUniqueQuote();
+      shownQuotes = [quotes.indexOf(quoteDisplay.textContent)];
+      updateCycleIndicator();
     });
 
     // Обработчик на кнопку
