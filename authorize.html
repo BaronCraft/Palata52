@@ -1,465 +1,60 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Вход · Палата №52</title>
-  <link rel="icon" href="/Логотипчик.jpg" type="image/jpeg">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"></script>
-  
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+<meta charset="UTF-8" />
+<title>Авторизация</title>
+<script>
+  // Хеш-функция (простая) для сравнения пароля
+  function hashCode(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash |= 0; // преобразование в 32bit int
+    }
+    return hash;
+  }
+
+  // Захешированный пароль Матвея: 'm8012011'
+  const validUsername = "Матвей";
+  const validPasswordHash = hashCode('m8012011');
+
+  function authorize(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    if (username !== validUsername) {
+      alert('Авторизация временно недоступна для выбранного пользователя.');
+      return;
     }
 
-    body {
-      background-color: #0a0f1a;
-      font-family: 'Inter', sans-serif;
-      color: #e0e6f0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow-x: hidden;
-      padding: 1rem;
+    if (hashCode(password) === validPasswordHash) {
+      alert('Авторизация успешна!');
+      // Здесь можно выполнить переход или отправку формы на сервер
+    } else {
+      alert('Неверный пароль.');
     }
-
-    .background-grid {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        linear-gradient(rgba(0, 100, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 100, 255, 0.03) 1px, transparent 1px);
-      background-size: 50px 50px;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .glow {
-      position: absolute;
-      width: 80vh;
-      height: 80vh;
-      background: radial-gradient(circle at 30% 30%, rgba(0, 120, 255, 0.15), transparent 70%);
-      top: -20vh;
-      right: -10vw;
-      border-radius: 50%;
-      filter: blur(100px);
-      z-index: 0;
-    }
-
-    .glow-2 {
-      position: absolute;
-      width: 100vh;
-      height: 100vh;
-      background: radial-gradient(circle at 70% 80%, rgba(0, 180, 255, 0.1), transparent 70%);
-      bottom: -30vh;
-      left: -10vw;
-      border-radius: 50%;
-      filter: blur(120px);
-      z-index: 0;
-    }
-
-    .auth-card {
-      position: relative;
-      z-index: 10;
-      max-width: 500px;
-      width: 100%;
-      margin: 1rem auto;
-      padding: 2.5rem 2rem;
-      background: rgba(10, 18, 30, 0.6);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(0, 150, 255, 0.15);
-      border-radius: 2.5rem;
-      box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 160, 255, 0.1) inset;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      text-align: center;
-    }
-
-    .auth-card:hover {
-      box-shadow: 0 40px 70px -10px rgba(0, 100, 255, 0.3), 0 0 0 1px rgba(0, 180, 255, 0.2) inset;
-      transform: scale(1.01);
-    }
-
-    .auth-header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-      font-size: 1.8rem;
-      font-weight: 700;
-    }
-
-    .auth-header .num-sign {
-      font-size: 5rem;
-      background: linear-gradient(135deg, #3b82f6, #00a6ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 20px #3b82f6);
-    }
-
-    .auth-header .num-52 {
-      font-size: 5rem;
-      background: linear-gradient(135deg, #ffffff, #a0c8ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: 0 0 25px rgba(59,130,246,0.6);
-    }
-
-    .auth-title {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 2rem;
-      background: linear-gradient(135deg, #d6e6ff, #80b4ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .form-group {
-      margin-bottom: 1.5rem;
-      text-align: left;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: #a0c0ff;
-      font-weight: 500;
-      font-size: 0.95rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .input-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .input-wrapper input {
-      width: 100%;
-      padding: 1rem 3rem 1rem 1.5rem;
-      background: rgba(0, 20, 40, 0.5);
-      border: 1px solid #1e3f60;
-      border-radius: 60px;
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
-      color: white;
-      transition: all 0.2s;
-    }
-
-    .input-wrapper input:focus {
-      outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-      background: rgba(0, 30, 60, 0.6);
-    }
-
-    .input-wrapper input::placeholder {
-      color: #5f7999;
-      font-style: italic;
-    }
-
-    .password-toggle {
-      position: absolute;
-      right: 1rem;
-      background: transparent;
-      border: none;
-      color: #3b82f6;
-      cursor: pointer;
-      font-size: 1.2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0.7;
-      transition: opacity 0.2s;
-      padding: 0.25rem;
-      z-index: 2;
-    }
-
-    .password-toggle:hover {
-      opacity: 1;
-    }
-
-    .btn-login {
-      width: 100%;
-      background: #2563eb;
-      border: none;
-      color: white;
-      font-weight: 600;
-      font-size: 1.2rem;
-      padding: 1rem;
-      border-radius: 60px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.8rem;
-      cursor: pointer;
-      box-shadow: 0 10px 25px -5px #2563eb80;
-      transition: all 0.2s;
-      border: 1px solid rgba(255,255,255,0.1);
-      margin-bottom: 1rem;
-      position: relative;
-    }
-
-    .btn-login:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-
-    .btn-login:hover:not(:disabled) {
-      background: #3b82f6;
-      box-shadow: 0 20px 30px -5px #1e4bae;
-    }
-
-    .spinner {
-      display: none;
-      width: 1.2rem;
-      height: 1.2rem;
-      border: 3px solid rgba(255,255,255,0.3);
-      border-radius: 50%;
-      border-top-color: white;
-      animation: spin 1s ease-in-out infinite;
-      margin-left: 0.5rem;
-    }
-
-    .btn-login.loading .spinner {
-      display: inline-block;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .error-message {
-      color: #ff6b6b;
-      font-size: 0.9rem;
-      margin: 1rem 0;
-      min-height: 1.5rem;
-    }
-
-    .back-link {
-      display: inline-block;
-      color: #5f7999;
-      text-decoration: none;
-      font-size: 0.9rem;
-      transition: color 0.2s;
-      margin-top: 1rem;
-    }
-
-    .back-link:hover {
-      color: #3b82f6;
-    }
-
-    @media (max-width: 480px) {
-      .auth-card {
-        padding: 2rem 1.5rem;
-      }
-      
-      .auth-title {
-        font-size: 1.8rem;
-      }
-      
-      .auth-header .num-sign,
-      .auth-header .num-52 {
-        font-size: 4rem;
-      }
-      
-      .input-wrapper input {
-        padding: 0.9rem 3rem 0.9rem 1.2rem;
-      }
-    }
-  </style>
+  }
+</script>
 </head>
 <body>
-  <div class="background-grid"></div>
-  <div class="glow"></div>
-  <div class="glow-2"></div>
+<h2>Авторизация</h2>
+<form onsubmit="authorize(event)">
+  <label for="username">Имя:</label>
+  <select id="username" name="username" required>
+    <option>Матвей</option>
+    <option>Артём</option>
+    <option>Ксюша</option>
+    <option>Оля</option>
+    <option>Ирина</option>
+  </select><br><br>
 
-  <main class="auth-card">
-    <div class="auth-header">
-      <span class="num-sign">#</span>
-      <span class="num-52">52</span>
-    </div>
+  <label for="password">Пароль:</label>
+  <input type="password" id="password" name="password" required /><br><br>
 
-    <div class="auth-title">Вход в палату</div>
-
-    <div class="form-group">
-      <label>Email</label>
-      <div class="input-wrapper">
-        <input type="email" id="email" placeholder="matvey@palata52.ru" required>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Пароль</label>
-      <div class="input-wrapper">
-        <input type="password" id="password" placeholder="••••••••" required>
-        <button class="password-toggle" id="togglePassword" type="button">
-          <i class="bi bi-eye"></i>
-        </button>
-      </div>
-    </div>
-
-    <button class="btn-login" id="loginBtn">
-      <span>Войти</span>
-      <span class="spinner" id="spinner"></span>
-    </button>
-
-    <div id="errorMsg" class="error-message"></div>
-
-    <a href="index.html" class="back-link">
-      ← На главную
-    </a>
-  </main>
-
-  <script>
-    // 🔥 ВАШ КОНФИГ FIREBASE
-    const firebaseConfig = { 
-      apiKey: "AIzaSyDHoQHf9v-bDrlBmP0VUUIhdRym813B1EI", 
-      authDomain: "palata52-3965d.firebaseapp.com", 
-      projectId: "palata52-3965d", 
-      storageBucket: "palata52-3965d.firebasestorage.app", 
-      messagingSenderId: "383136571598", 
-      appId: "1:383136571598:web:fa1598e1ffe8bfbffd309f" 
-    };
-
-    // Инициализация Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    // Для отладки - кто вошёл
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        console.log("Пользователь вошёл:", user.email);
-      }
-    });
-
-    // Элементы
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const togglePassword = document.getElementById('togglePassword');
-    const loginBtn = document.getElementById('loginBtn');
-    const errorMsg = document.getElementById('errorMsg');
-    const spinner = document.getElementById('spinner');
-
-    // Показать/скрыть пароль
-    togglePassword.addEventListener('click', function() {
-      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-      passwordInput.setAttribute('type', type);
-      const icon = this.querySelector('i');
-      if (type === 'password') {
-        icon.classList.remove('bi-eye-slash');
-        icon.classList.add('bi-eye');
-      } else {
-        icon.classList.remove('bi-eye');
-        icon.classList.add('bi-eye-slash');
-      }
-    });
-
-    function showError(text) {
-      errorMsg.textContent = text;
-    }
-
-    function setLoading(isLoading) {
-      if (isLoading) {
-        loginBtn.classList.add('loading');
-        loginBtn.disabled = true;
-      } else {
-        loginBtn.classList.remove('loading');
-        loginBtn.disabled = false;
-      }
-    }
-
-    async function handleLogin() {
-      const email = emailInput.value.trim();
-      const password = passwordInput.value.trim();
-
-      showError('');
-
-      if (!email) {
-        showError('Введи email');
-        return;
-      }
-
-      if (!password) {
-        showError('Введи пароль');
-        return;
-      }
-
-      setLoading(true);
-
-      try {
-        // Вход через Firebase
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
-        
-        // Успешный вход
-        localStorage.setItem('user', JSON.stringify({
-          email: userCredential.user.email,
-          uid: userCredential.user.uid,
-          loginTime: new Date().toISOString()
-        }));
-        
-        window.location.href = '/messenger.html';
-        
-      } catch (error) {
-        console.error("Ошибка входа:", error);
-        
-        // Понятные сообщения об ошибках
-        switch(error.code) {
-          case 'auth/user-not-found':
-            showError('Пользователь не найден');
-            break;
-          case 'auth/wrong-password':
-            showError('Неверный пароль');
-            break;
-          case 'auth/invalid-email':
-            showError('Неверный формат email');
-            break;
-          case 'auth/too-many-requests':
-            showError('Слишком много попыток. Попробуй позже');
-            break;
-          default:
-            showError('Ошибка входа: ' + error.message);
-        }
-        setLoading(false);
-      }
-    }
-
-    // Обработчики
-    loginBtn.addEventListener('click', handleLogin);
-    
-    passwordInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        handleLogin();
-      }
-    });
-
-    emailInput.addEventListener('input', () => showError(''));
-    passwordInput.addEventListener('input', () => showError(''));
-
-    // Если уже вошли - сразу в мессенджер
-    auth.onAuthStateChanged((user) => {
-      if (user && window.location.pathname.includes('authorize.html')) {
-        window.location.href = '/messenger.html';
-      }
-    });
-  </script>
+  <button type="submit">Войти</button>
+</form>
 </body>
 </html>
